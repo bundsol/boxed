@@ -119,7 +119,7 @@ Run `elm-repl` and type as follows
 
 
 A field like `properties`, seen above as member of Schema, is found many times
-in API Specifications. And, although the top level structure of Schema may 
+in API specifications. And, although the top level structure of Schema may 
 remain pretty much the same, the contents of the `properties` member can be
 expected to be more dynamic. And that is where we can use the `Boxed` type as 
 a catch-all, maybe even for rapid prototyping.
