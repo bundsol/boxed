@@ -11,7 +11,10 @@ them can be encapsulations of values of different types.
 
 
 # Unboxing
-@docs filterMap, foldr, foldl, mapGet, tryBool, tryFloat, tryInt, tryString, tryValue
+@docs filterMap, foldr, foldl, mapGet
+
+### Return value of the indicated type only if given `Boxed` is currently holding an encapsulation of said type. Defined mainly as helpers for the Dict's `map`, `filter` and `partition` functions.
+@docs tryBool, tryFloat, tryInt, tryString, tryValue
 
 
 # Build
@@ -64,7 +67,7 @@ insert key value boxed =
 
 
 
-{-| Update the value of a boxed ictionary for a specific key with a given function.
+{-| Update the value of a boxed dictionary for a specific key with a given function.
 
     boxedDict = Dictionary (Dict.fromList [("one", Str "b"), ("two", Double 3.03)])
     
@@ -90,19 +93,14 @@ remove key boxed =
   apply (Dict.remove key) boxed
   |> Dictionary
 
-
-
-
-
-
 {-| Apply a given function to a boxed dictionary.
 
     boxedDict = Dictionary (Dict.fromList [("one", Str "b"), ("two", Double 3.03)])
     
     apply (Dict.get "two") boxedDict == Just (Double 3.03)
-    apply Dict.isEmpty (Str "d") == True
     apply (Dict.member "one") boxedDict == True
     apply Dict.size boxedDict == 2
+    apply Dict.isEmpty (Str "d") == True
     apply (Dict.map tryString) boxedDict == Dict.fromList [("one",Just "b"),("two",Nothing)]
 -}
 apply : (Dict String (Boxed c) -> a)  -> Boxed c -> a
@@ -122,7 +120,6 @@ foldr : (String -> Boxed c -> a -> a) -> a -> Boxed c -> a
 foldr build accum boxed =
   asDict boxed 
   |> Dict.foldl build accum   
-
 
 
 {-| Returns a `Dict` with only succesful values, resulting from the 
@@ -145,8 +142,7 @@ filterMap convert boxed =
     foldl build Dict.empty boxed
 
 
-
-{-| Get the value associated with a key. Successful only if found and
+{-| Get the value associated with a key. Successful only if found, and
 the given function could be applied to it.
 
     boxedDict = Dictionary (Dict.fromList [("one", Integer 1), ("two", Double 3.03)])
@@ -160,17 +156,12 @@ mapGet convert key boxed =
   |> andThen convert
 
 
-
-
-{-| Return an `Int` only if given `Boxed` is currently a simple `Integer`.
-Defined mainly as a helper for the Dict's map, filter and partition functions.
--}
+{-|-}
 tryInt : String -> Boxed c -> Maybe Int
 tryInt _ boxed =
   case boxed of 
     Integer i -> Just i
     _ -> Nothing
-    
 
 
 {-|-}    
@@ -179,10 +170,9 @@ tryBool _ boxed =
   case boxed of 
     Boolean b -> Just b
     _ -> Nothing    
-    
 
 
-{-| Both `Integer`s and `Double`s will be able to pass as `Floats`
+{-| Both `Integer` and `Double` will be able to pass as `Float`
 -}    
 tryFloat : String -> Boxed c -> Maybe Float
 tryFloat _ boxed =

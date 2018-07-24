@@ -1,7 +1,7 @@
 module Boxed.Json exposing
   ( expand
-  , boxedDecoder
-  , boxedEncoder
+  , decoder
+  , encoder
   )
 
 
@@ -9,11 +9,11 @@ module Boxed.Json exposing
 
 
 # Decoding
-@docs boxedDecoder, expand
+@docs decoder, expand
 
 
 # Encoding
-@docs boxedEncoder
+@docs encoder
 
 
 -}
@@ -53,8 +53,8 @@ custom values. It will only decode dictionaries at top level if they are only
 one level deep and its values are all primitives.  Same with lists. Composite
 objects deeper than that will be stored as Json.
 -} 
-boxedDecoder : Decoder (Boxed c)
-boxedDecoder  =
+decoder : Decoder (Boxed c)
+decoder  =
   oneOf 
     [ Decode.list primitiveDecoder
       |> Decode.map Lst
@@ -88,13 +88,13 @@ primitiveEncoder boxed =
 {-| Handy encoder for the `Boxed` type. It only encodes primitives, Dictionary 
 and Lst. If it encouters a `Tup` or a `Custom`, it will render them `null`.
 -} 
-boxedEncoder : Boxed c -> Value 
-boxedEncoder boxed =
+encoder : Boxed c -> Value 
+encoder boxed =
   case boxed of 
     Lst v ->
-      Encode.list (List.map boxedEncoder v)
+      Encode.list (List.map encoder v)
     Dictionary d -> 
-      Dict.map (\k v -> boxedEncoder v) d 
+      Dict.map (\k v -> encoder v) d 
       |> Dict.toList
       |> Encode.object
     _ -> primitiveEncoder boxed    
@@ -107,7 +107,7 @@ Lst and primitives.
 
 
     str =  "{ \"banker\": { \"name\": \"Alice\" }, \"fireman\": { \"age\": 42 } }"
-    boxed =  decodeString boxedDecoder str |> Result.withDefault Null
+    boxed =  decodeString decoder str |> Result.withDefault Null
     expand boxed == Dictionary (Dict.fromList [("banker",Dictionary (Dict.fromList [("name",Str "Alice")])),("fireman",Dictionary (Dict.fromList [("age",Integer 42)]))])
 -}  
 expand : Boxed c -> Boxed c

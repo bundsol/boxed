@@ -4,23 +4,22 @@ module Boxed exposing
   , isBool, isInt, isFloat, isString, isValue, isList, isDict, isTuple, isCustom, isNull, isTrue
   )
 
-
-  
-{-| This library allows one to hold a value of any type. The name of the module
-is derived from the 'Autoboxing' concept in Java. The `Boxed' module can be
+{-| This library allows a variable to hold a value of any type. The name of the 
+module is derived from the Autoboxing concept in Java. `Boxed` values can be 
 useful when receiving external data that you do not want to thoroughly check for
-errors, regarding the type of values sent. For example, you might be more 
-interested in the structure of the received data than the type of each of the 
-member values. The decoder for this module lets any kind of value through, while 
-you focus on the shape of the whole data structure.
+errors, but rather disregard the type of some of the values obtained. For 
+example, you might be more interested in the structure of the received data than 
+the type of all of the member values. The decoder found at `Boxed.Json` lets 
+any kind of value through, allowing you to focus on the shape of the whole data 
+structure.
 
-Some functions are provided to help extract native Elm values, for example:
+Some helper functions are provided to extract native Elm values, for example:
 
     filterMap asFloat (Lst [Integer 1, Str "b", Double 3.01]) 
     -- It returns [1,3.01]
 
 
-Note: Dict has been limited to use only `String`s as keys
+Note: Dict has been limited to use only `String` as keys
 
 
 # Definition
@@ -28,10 +27,12 @@ Note: Dict has been limited to use only `String`s as keys
 
 
 # Unboxing 
+### Return value of the indicated type only if given `Boxed` is currently holding an encapsulation of said type. (Exception made on `asFloat`).
 @docs asBool, asFloat, asInt, asString, asValue, asList, asDict, isTrue
 
 
 # Query
+### Functions to determine the type currently encapsulated.
 @docs isBool, isFloat, isInt, isString, isValue, isList, isDict, isTuple, isCustom, isNull
 
 
@@ -75,7 +76,7 @@ asBool boxed =
     Boolean b -> Just b
     _ -> Nothing    
     
-{-| Both `Integer`s and `Double`s will be able to pass as `Floats`
+{-| Note: Both `Integer` and `Double` will be able to pass as `Float`
 -}
 asFloat : Boxed c -> Maybe Float
 asFloat boxed =
@@ -101,7 +102,8 @@ asValue boxed =
 
 
 
-{-|-}
+{-| Always returns a `Dict`. Consider using it along with isDict.
+-}
 asDict : Boxed c -> Dict String (Boxed c)
 asDict boxed =
   case boxed of 
@@ -109,7 +111,8 @@ asDict boxed =
     _ -> Dict.empty
 
 
-{-|-}
+{-| Always returns a `List`. Consider using it along with isList.
+-}
 asList : Boxed c -> List (Boxed c)
 asList boxed =
   case boxed of 
@@ -126,8 +129,7 @@ isTrue boxed =
 
 
 
-{-| Functions to determine the type currently encapsulated.
--}    
+{-|-}
 isBool : Boxed c -> Bool
 isBool boxed =
   case boxed of 
