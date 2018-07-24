@@ -3,8 +3,8 @@ An Elm union type and library to encapsulate any primitive in a single type
 
 
 ## Motivation
-Oftentimes, you find yourself tailoring decoders for all the different schemas,
-or records, that you are expecting from the backend. But what if you simply come
+Oftentimes, you find yourself tailoring decoders for all the different schemas
+or records that you are expecting from the back end. But what if you simply come
 up with a decoder that stores those records, say, as a Dict? And forget for
 the moment about the type of each member of the record. You can deal with
 that later. You won't worry about the names of the fields in your record, either.
