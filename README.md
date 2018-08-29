@@ -30,7 +30,7 @@ import Boxed exposing (Boxed(..))
 import Boxed.Json
 import Dict exposing (Dict)
 
-(=>) = (,)
+
 o = Encode.object
 s = Encode.string
 b = Encode.bool
@@ -38,24 +38,26 @@ i = Encode.int
 
 
 albumIdSample = o
-  [ "type" => s "string"
-  , "required" => b True
-  , "minLength" => i 36
-  , "maxLength" => i 36
+  [ ("type" , s "string")
+  , ("required" , b True)
+  , ("minLength" , i 36)
+  , ("maxLength" , i 36)
   ]
 
 sample = o
-  [ "type" => s "object"
-  , "$schema" => s "http://json-schema.org/draft-03/schema"
-  , "id" => s "http://jsonschema.net"
-  , "required" => b True
-  , "properties" => o
-    [ "songTitle" => o
-      [ "type" => s "string"
-      , "required" => b True
+  [ ("type" , s "object")
+  , ("$schema" , s "http://json-schema.org/draft-03/schema")
+  , ("id" , s "http://jsonschema.net")
+  , ("required" , b True)
+  , ("properties" , o
+      [ ("songTitle" , o
+          [ ("type" , s "string")
+          , ("required" , b True)
+          ]
+        )
+      , ("albumId" , albumIdSample)
       ]
-    , "albumId" => albumIdSample
-    ]
+    )
   ]
 
 
