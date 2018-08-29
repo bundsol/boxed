@@ -21,7 +21,7 @@ The sample data in the following example has been taken from the
 
 Save this code in a file called Demo.elm,
 
-```elm
+```elm 
 module Demo exposing (schema, albumId)
 
 import Json.Encode as Encode
