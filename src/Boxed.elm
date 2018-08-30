@@ -1,5 +1,5 @@
 module Boxed exposing
-    ( Boxed(..)
+    ( Boxed(..) 
     , asBool, asFloat, asInt, asString, asValue, asList, asDict, isTrue
     , isBool, isFloat, isInt, isString, isValue, isList, isDict, isTuple, isCustom, isNull
     )
