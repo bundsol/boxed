@@ -123,7 +123,7 @@ into a different value.
 mapHead : (Boxed c -> Maybe a) -> Boxed c -> Maybe a
 mapHead convert boxed =
     apply List.head boxed
-        |> andThen convert
+        |> andThen convert 
 
 
 {-| Returns only succesful values, resulting from the application of a
